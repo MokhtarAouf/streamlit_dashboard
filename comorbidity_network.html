@@ -1,0 +1,178 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "label": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Traitements anxiolytiques (hors pathologies)", "label": "Traitements anxiolytiques (hors pathologies)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Troubles du rythme ou de la conduction cardiaque", "label": "Troubles du rythme ou de la conduction cardiaque", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Troubles n\u00e9vrotiques et de l\u0027humeur", "label": "Troubles n\u00e9vrotiques et de l\u0027humeur", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "S\u00e9quelle d\u0027accident vasculaire c\u00e9r\u00e9bral", "label": "S\u00e9quelle d\u0027accident vasculaire c\u00e9r\u00e9bral", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Art\u00e9riopathie p\u00e9riph\u00e9rique", "label": "Art\u00e9riopathie p\u00e9riph\u00e9rique", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Maladie valvulaire", "label": "Maladie valvulaire", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Autres troubles psychiatriques", "label": "Autres troubles psychiatriques", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Cancer du sein de la femme sous surveillance", "label": "Cancer du sein de la femme sous surveillance", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Autres affections cardiovasculaires", "label": "Autres affections cardiovasculaires", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Autres maladies inflammatoires chroniques", "label": "Autres maladies inflammatoires chroniques", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Polyarthrite rhumato\u00efde ou maladies apparent\u00e9es", "label": "Polyarthrite rhumato\u00efde ou maladies apparent\u00e9es", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "L\u00e9sion m\u00e9dullaire", "label": "L\u00e9sion m\u00e9dullaire", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Cancer bronchopulmonaire actif", "label": "Cancer bronchopulmonaire actif", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Myopathie ou myasth\u00e9nie", "label": "Myopathie ou myasth\u00e9nie", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Suivi de transplantation r\u00e9nale", "label": "Suivi de transplantation r\u00e9nale", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Mucoviscidose", "label": "Mucoviscidose", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Maladies respiratoires chroniques (hors mucoviscidose)", "label": "Maladies respiratoires chroniques (hors mucoviscidose)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Traitements antid\u00e9presseurs ou r\u00e9gulateurs de l\u0027humeur (hors pathologies)", "label": "Traitements antid\u00e9presseurs ou r\u00e9gulateurs de l\u0027humeur (hors pathologies)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Maladie coronaire chronique", "label": "Maladie coronaire chronique", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Insuffisance cardiaque chronique", "label": "Insuffisance cardiaque chronique", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Autres cancers sous surveillance", "label": "Autres cancers sous surveillance", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "\u00c9pilepsie", "label": "\u00c9pilepsie", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "label": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Maladie de Parkinson", "label": "Maladie de Parkinson", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Maladies inflammatoires chroniques intestinales", "label": "Maladies inflammatoires chroniques intestinales", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Spondylarthrite ankylosante ou maladies apparent\u00e9es", "label": "Spondylarthrite ankylosante ou maladies apparent\u00e9es", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Cancer du sein de la femme actif", "label": "Cancer du sein de la femme actif", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Maternit\u00e9 (avec ou sans pathologies)", "label": "Maternit\u00e9 (avec ou sans pathologies)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Infection par le VIH", "label": "Infection par le VIH", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "H\u00e9mophilie ou troubles de l\u0027h\u00e9mostase graves", "label": "H\u00e9mophilie ou troubles de l\u0027h\u00e9mostase graves", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Traitements antihypertenseurs (hors pathologies)", "label": "Traitements antihypertenseurs (hors pathologies)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "D\u00e9mences (dont maladie d\u0027Alzheimer)", "label": "D\u00e9mences (dont maladie d\u0027Alzheimer)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Autres cancers actifs", "label": "Autres cancers actifs", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Traitements neuroleptiques (hors pathologies)", "label": "Traitements neuroleptiques (hors pathologies)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Troubles addictifs", "label": "Troubles addictifs", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Cancer de la prostate sous surveillance", "label": "Cancer de la prostate sous surveillance", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Cancer de la prostate actif", "label": "Cancer de la prostate actif", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Maladies m\u00e9taboliques h\u00e9r\u00e9ditaires ou amylose", "label": "Maladies m\u00e9taboliques h\u00e9r\u00e9ditaires ou amylose", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "D\u00e9ficience mentale", "label": "D\u00e9ficience mentale", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Dialyse chronique", "label": "Dialyse chronique", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Traitements hypolip\u00e9miants (hors pathologies)", "label": "Traitements hypolip\u00e9miants (hors pathologies)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Traitements hypnotiques (hors pathologies)", "label": "Traitements hypnotiques (hors pathologies)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Insuffisance cardiaque aigu\u00eb", "label": "Insuffisance cardiaque aigu\u00eb", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Cancer colorectal sous surveillance", "label": "Cancer colorectal sous surveillance", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Accident vasculaire c\u00e9r\u00e9bral aigu", "label": "Accident vasculaire c\u00e9r\u00e9bral aigu", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Cancer colorectal actif", "label": "Cancer colorectal actif", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Troubles psychiatriques d\u00e9butant dans l\u0027enfance", "label": "Troubles psychiatriques d\u00e9butant dans l\u0027enfance", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "label": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Diab\u00e8te", "label": "Diab\u00e8te", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Syndrome coronaire aigu", "label": "Syndrome coronaire aigu", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Hospitalisation pour Covid-19", "label": "Hospitalisation pour Covid-19", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Troubles psychotiques", "label": "Troubles psychotiques", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Autres affections neurologiques", "label": "Autres affections neurologiques", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Scl\u00e9rose en plaques", "label": "Scl\u00e9rose en plaques", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "label": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Cancer bronchopulmonaire sous surveillance", "label": "Cancer bronchopulmonaire sous surveillance", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Transplantation r\u00e9nale", "label": "Transplantation r\u00e9nale", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Embolie pulmonaire", "label": "Embolie pulmonaire", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Traitements anxiolytiques (hors pathologies)", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Troubles du rythme ou de la conduction cardiaque", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Troubles n\u00e9vrotiques et de l\u0027humeur", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "S\u00e9quelle d\u0027accident vasculaire c\u00e9r\u00e9bral", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Art\u00e9riopathie p\u00e9riph\u00e9rique", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Maladie valvulaire", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Autres troubles psychiatriques", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Cancer du sein de la femme sous surveillance", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Autres affections cardiovasculaires", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Autres maladies inflammatoires chroniques", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Polyarthrite rhumato\u00efde ou maladies apparent\u00e9es", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "L\u00e9sion m\u00e9dullaire", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Cancer bronchopulmonaire actif", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Myopathie ou myasth\u00e9nie", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Suivi de transplantation r\u00e9nale", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Mucoviscidose", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Maladies respiratoires chroniques (hors mucoviscidose)", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Traitements antid\u00e9presseurs ou r\u00e9gulateurs de l\u0027humeur (hors pathologies)", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Maladie coronaire chronique", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Insuffisance cardiaque chronique", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Autres cancers sous surveillance", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "\u00c9pilepsie", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Maladie de Parkinson", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Maladies inflammatoires chroniques intestinales", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Spondylarthrite ankylosante ou maladies apparent\u00e9es", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Cancer du sein de la femme actif", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Infection par le VIH", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "H\u00e9mophilie ou troubles de l\u0027h\u00e9mostase graves", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Traitements antihypertenseurs (hors pathologies)", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "D\u00e9mences (dont maladie d\u0027Alzheimer)", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Autres cancers actifs", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Traitements neuroleptiques (hors pathologies)", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Troubles addictifs", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Cancer de la prostate sous surveillance", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Cancer de la prostate actif", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Maladies m\u00e9taboliques h\u00e9r\u00e9ditaires ou amylose", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "D\u00e9ficience mentale", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Dialyse chronique", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Traitements hypolip\u00e9miants (hors pathologies)", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Traitements hypnotiques (hors pathologies)", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Insuffisance cardiaque aigu\u00eb", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Cancer colorectal sous surveillance", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Accident vasculaire c\u00e9r\u00e9bral aigu", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Cancer colorectal actif", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Troubles psychiatriques d\u00e9butant dans l\u0027enfance", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Diab\u00e8te", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Syndrome coronaire aigu", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Hospitalisation pour Covid-19", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Troubles psychotiques", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Autres affections neurologiques", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Scl\u00e9rose en plaques", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Cancer bronchopulmonaire sous surveillance", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Transplantation r\u00e9nale", "width": 1}, {"from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Embolie pulmonaire", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "repulsion": {
+            "centralGravity": 0.33,
+            "damping": 0.09,
+            "nodeDistance": 200,
+            "springConstant": 0.1,
+            "springLength": 100
+        },
+        "solver": "repulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

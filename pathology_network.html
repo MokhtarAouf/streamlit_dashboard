@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "Cancers", "label": "Cancers", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Insuffisance r\u00e9nale chronique terminale", "label": "Insuffisance r\u00e9nale chronique terminale", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Maladies cardioneurovasculaires", "label": "Maladies cardioneurovasculaires", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "label": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Maladies inflammatoires ou rares ou infection VIH", "label": "Maladies inflammatoires ou rares ou infection VIH", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Maladies neurologiques", "label": "Maladies neurologiques", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Maladies psychiatriques", "label": "Maladies psychiatriques", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Maladies respiratoires chroniques (hors mucoviscidose)", "label": "Maladies respiratoires chroniques (hors mucoviscidose)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Traitements du risque vasculaire (hors pathologies)", "label": "Traitements du risque vasculaire (hors pathologies)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Traitements psychotropes (hors pathologies)", "label": "Traitements psychotropes (hors pathologies)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Diab\u00e8te", "label": "Diab\u00e8te", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Hospitalisation pour Covid-19", "label": "Hospitalisation pour Covid-19", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "label": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Maternit\u00e9 (avec ou sans pathologies)", "label": "Maternit\u00e9 (avec ou sans pathologies)", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "label": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "label": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "label": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Insuffisance r\u00e9nale chronique terminale", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Maladies cardioneurovasculaires", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Maladies inflammatoires ou rares ou infection VIH", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Maladies neurologiques", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Maladies psychiatriques", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Maladies respiratoires chroniques (hors mucoviscidose)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Traitements du risque vasculaire (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Traitements psychotropes (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Diab\u00e8te", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Hospitalisation pour Covid-19", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Cancers", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Maladies cardioneurovasculaires", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Maladies inflammatoires ou rares ou infection VIH", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Maladies neurologiques", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Maladies psychiatriques", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Maladies respiratoires chroniques (hors mucoviscidose)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Traitements du risque vasculaire (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Traitements psychotropes (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Diab\u00e8te", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Hospitalisation pour Covid-19", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Insuffisance r\u00e9nale chronique terminale", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Maladies inflammatoires ou rares ou infection VIH", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Maladies neurologiques", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Maladies psychiatriques", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Maladies respiratoires chroniques (hors mucoviscidose)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Traitements du risque vasculaire (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Traitements psychotropes (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Diab\u00e8te", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Hospitalisation pour Covid-19", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies cardioneurovasculaires", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Maladies inflammatoires ou rares ou infection VIH", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Maladies neurologiques", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Maladies psychiatriques", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Maladies respiratoires chroniques (hors mucoviscidose)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Traitements du risque vasculaire (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Traitements psychotropes (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Diab\u00e8te", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Hospitalisation pour Covid-19", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies du foie ou du pancr\u00e9as (hors mucoviscidose)", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Maladies neurologiques", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Maladies psychiatriques", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Maladies respiratoires chroniques (hors mucoviscidose)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Traitements du risque vasculaire (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Traitements psychotropes (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Diab\u00e8te", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Hospitalisation pour Covid-19", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies inflammatoires ou rares ou infection VIH", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies neurologiques", "to": "Maladies psychiatriques", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies neurologiques", "to": "Maladies respiratoires chroniques (hors mucoviscidose)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies neurologiques", "to": "Traitements du risque vasculaire (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies neurologiques", "to": "Traitements psychotropes (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies neurologiques", "to": "Diab\u00e8te", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies neurologiques", "to": "Hospitalisation pour Covid-19", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies neurologiques", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies neurologiques", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies neurologiques", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies neurologiques", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies neurologiques", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies psychiatriques", "to": "Maladies respiratoires chroniques (hors mucoviscidose)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies psychiatriques", "to": "Traitements du risque vasculaire (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies psychiatriques", "to": "Traitements psychotropes (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies psychiatriques", "to": "Diab\u00e8te", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies psychiatriques", "to": "Hospitalisation pour Covid-19", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies psychiatriques", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies psychiatriques", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies psychiatriques", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies psychiatriques", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies psychiatriques", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies respiratoires chroniques (hors mucoviscidose)", "to": "Traitements du risque vasculaire (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies respiratoires chroniques (hors mucoviscidose)", "to": "Traitements psychotropes (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies respiratoires chroniques (hors mucoviscidose)", "to": "Diab\u00e8te", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies respiratoires chroniques (hors mucoviscidose)", "to": "Hospitalisation pour Covid-19", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies respiratoires chroniques (hors mucoviscidose)", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies respiratoires chroniques (hors mucoviscidose)", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies respiratoires chroniques (hors mucoviscidose)", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies respiratoires chroniques (hors mucoviscidose)", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maladies respiratoires chroniques (hors mucoviscidose)", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements du risque vasculaire (hors pathologies)", "to": "Traitements psychotropes (hors pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements du risque vasculaire (hors pathologies)", "to": "Diab\u00e8te", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements du risque vasculaire (hors pathologies)", "to": "Hospitalisation pour Covid-19", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements du risque vasculaire (hors pathologies)", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements du risque vasculaire (hors pathologies)", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements du risque vasculaire (hors pathologies)", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements du risque vasculaire (hors pathologies)", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements du risque vasculaire (hors pathologies)", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements psychotropes (hors pathologies)", "to": "Diab\u00e8te", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements psychotropes (hors pathologies)", "to": "Hospitalisation pour Covid-19", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements psychotropes (hors pathologies)", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements psychotropes (hors pathologies)", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements psychotropes (hors pathologies)", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements psychotropes (hors pathologies)", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Traitements psychotropes (hors pathologies)", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Diab\u00e8te", "to": "Hospitalisation pour Covid-19", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Diab\u00e8te", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Diab\u00e8te", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Diab\u00e8te", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Diab\u00e8te", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Diab\u00e8te", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Hospitalisation pour Covid-19", "to": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Hospitalisation pour Covid-19", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Hospitalisation pour Covid-19", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Hospitalisation pour Covid-19", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Hospitalisation pour Covid-19", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "to": "Maternit\u00e9 (avec ou sans pathologies)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Hospitalisations hors pathologies rep\u00e9r\u00e9es (avec ou sans pathologies, traitements ou maternit\u00e9)", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maternit\u00e9 (avec ou sans pathologies)", "to": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maternit\u00e9 (avec ou sans pathologies)", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Maternit\u00e9 (avec ou sans pathologies)", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Affections de longue dur\u00e9e (dont 31 et 32) pour d\u0027autres causes", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}, {"comorbidity": "\u00c9pilepsie", "from": "Pas de pathologie rep\u00e9r\u00e9e, traitement, maternit\u00e9, hospitalisation ou traitement antalgique ou anti-inflammatoire", "to": "Traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternit\u00e9 ou hospitalisations)", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
