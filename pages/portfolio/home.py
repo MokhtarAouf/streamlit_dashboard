@@ -66,12 +66,7 @@ def show_home():
     # Main content
     col1, col2 = st.columns([1, 1])
 
-    with col1:
-        img_path = './static/images/photo2.jpg'
-        img = Image.open(img_path)
-        st.markdown('<div class="framed-image">', unsafe_allow_html=True)
-        st.image(img, width=200)  # Adjust width as needed
-        st.markdown('</div>', unsafe_allow_html=True)
+  
 
     with col2:
         st.markdown("<h1 class='big-font'>Hi, I'm Mokhtar Aouf</h1>", unsafe_allow_html=True)
