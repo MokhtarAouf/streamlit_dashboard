@@ -2,3 +2,4 @@ folium
 streamlit_lottie
 plotly
 streamlit_folium
+streamlit_folium
