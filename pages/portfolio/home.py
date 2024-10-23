@@ -67,7 +67,7 @@ def show_home():
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        img_path = 'static/images/photo2.jpg'
+        img_path = './static/images/photo2.jpg'
         img = Image.open(img_path)
         st.markdown('<div class="framed-image">', unsafe_allow_html=True)
         st.image(img, width=200)  # Adjust width as needed
